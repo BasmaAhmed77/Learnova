@@ -1,5 +1,6 @@
 using LMS.BLL.AutoMapper;
 using LMS.BLL.Helper;
+using LMS.BLL.ModelVM;
 using LMS.BLL.Service.Abstraction;
 using LMS.BLL.Service.Implementation;
 using LMS.DAL.Database;
@@ -17,9 +18,12 @@ namespace LMS.PL
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings"));
             var connectionString = builder.Configuration.GetConnectionString("Connection");
             builder.Services.AddDbContext<LMSDBContext>(options =>
                 options.UseSqlServer(connectionString));
+           
             builder.Services.AddDbContext<LMSDBContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("Connection"),
