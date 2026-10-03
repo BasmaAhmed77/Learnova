@@ -1,0 +1,25 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY ["LMS.sln", "."]
+COPY ["LMS.PL/LMS.PL.csproj", "LMS.PL/"]
+COPY ["LMS.BLL/LMS.BLL.csproj", "LMS.BLL/"]
+COPY ["LMS.DAL/LMS.DAL.csproj", "LMS.DAL/"]
+
+RUN dotnet restore "LMS.sln"
+
+COPY . .
+
+RUN dotnet publish "LMS.PL/LMS.PL.csproj" \
+    -c Release \
+    -o /app/publish \
+    --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:80
+
+ENTRYPOINT ["dotnet", "LMS.PL.dll"]

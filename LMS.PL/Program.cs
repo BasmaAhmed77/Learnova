@@ -20,10 +20,12 @@ namespace LMS.PL
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.Configure<CloudinarySettings>(
     builder.Configuration.GetSection("CloudinarySettings"));
+            builder.Services.AddSingleton(sp => sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<CloudinarySettings>>().Value);
+
             var connectionString = builder.Configuration.GetConnectionString("Connection");
             builder.Services.AddDbContext<LMSDBContext>(options =>
                 options.UseSqlServer(connectionString));
-           
+
             builder.Services.AddDbContext<LMSDBContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("Connection"),
