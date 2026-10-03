@@ -1,0 +1,127 @@
+﻿@model LMS.BLL.ModelVM.Instructor.RegisterInstructorVM
+@{
+    Layout = "FinalLayout";
+    ViewData["Title"] = "Instructor Registration";
+}
+
+@{
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+<div class="row justify-content-center align-items-center" style="min-height: 100vh; padding: 3rem 0;">
+    <div class="col-md-10 col-lg-8">
+        <div class="card border-0 shadow-sm" style="border-radius: 20px; background: #ffffff;">
+            <div class="card-body p-5">
+
+                <div class="text-center mb-5">
+                    <div class="mb-3" style="display: inline-block; padding: 15px; background: #EFF6FF; border-radius: 50%;">
+                        <i class="fa-solid fa-chalkboard-user fa-2x" style="color: var(--primary-blue);"></i>
+                    </div>
+                    <h2 class="fw-bold" style="color: var(--text-dark);">Join as an Instructor</h2>
+                    <p class="text-muted small">Expand your reach and share your professional expertise</p>
+                </div>
+
+                <form asp-action="RegisterInstructor" method="post">
+                    <div asp-validation-summary="All" class="text-danger small mb-4 fw-bold"></div>
+
+                    <h6 class="text-primary mb-3 fw-bold border-bottom pb-2" style="font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;">1. Personal Information</h6>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Fname" class="form-label small fw-bold text-muted">First Name</label>
+                            <input asp-for="Fname" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="e.g. Grace" />
+                            <span asp-validation-for="Fname" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Lname" class="form-label small fw-bold text-muted">Last Name</label>
+                            <input asp-for="Lname" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="e.g. Hopper" />
+                            <span asp-validation-for="Lname" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="UserName" class="form-label small fw-bold text-muted">Username</label>
+                            <input asp-for="UserName" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="grace_dev" />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <h6 class="text-primary mb-3 fw-bold border-bottom pb-2" style="font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;">2. Professional Profile</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Title" class="form-label small fw-bold text-muted">Professional Title</label>
+                            <input asp-for="Title" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="e.g. Senior .NET Developer" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="AcademicDegree" class="form-label small fw-bold text-muted">Degree</label>
+                            <input asp-for="AcademicDegree" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="e.g. Master's" />
+                            <span asp-validation-for="AcademicDegree" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="YearsOfExperience" class="form-label small fw-bold text-muted">Experience (Years)</label>
+                            <input asp-for="YearsOfExperience"
+                                   type="number"
+                                   min="1"
+                                   class="form-control border-0 bg-light p-2"
+                                   style="border-radius: 10px;"
+                                   placeholder="e.g. 5" />
+                            <span asp-validation-for="YearsOfExperience" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Bio" class="form-label small fw-bold text-muted">Professional Bio</label>
+                        <textarea asp-for="Bio" class="form-control border-0 bg-light p-3" rows="3" style="border-radius: 10px;" placeholder="Describe your expertise and what you will teach..."></textarea>
+                        <span asp-validation-for="Bio" class="text-danger small"></span>
+                    </div>
+
+                    <h6 class="text-primary mb-3 fw-bold border-bottom pb-2" style="font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;">3. Credentials & Security</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label small fw-bold text-muted">Corporate Email</label>
+                            <input asp-for="Email" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="instructor@lms.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="DOB" class="form-label small fw-bold text-muted">Birth Date</label>
+                            <input asp-for="DOB" type="date" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" />
+                            <span asp-validation-for="DOB" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Gender" class="form-label small fw-bold text-muted d-block">Gender</label>
+                            <select asp-for="Gender" class="form-select border-0 bg-light p-2" style="border-radius: 10px; font-size: 0.9rem;">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Password" class="form-label small fw-bold text-muted">Password</label>
+                            <div class="password-wrapper">
+                                <input asp-for="Password" type="password" id="instPass" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="••••••••" />
+                                <i class="fa-solid fa-eye-slash password-toggle-icon" onclick="togglePassword('instPass', this)"></i>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label small fw-bold text-muted">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input asp-for="ConfirmPassword" type="password" id="instConf" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="••••••••" />
+                                <i class="fa-solid fa-eye-slash password-toggle-icon" onclick="togglePassword('instConf', this)"></i>
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-create-header w-100 py-3 mt-3 shadow-sm fw-bold">
+                        Apply for Instructor Account
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

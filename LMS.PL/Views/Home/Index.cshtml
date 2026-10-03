@@ -1,0 +1,1507 @@
+﻿
+
+@* @model List<LMS.BLL.ModelVM.CourseVM>
+
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<style>
+    .hero {
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        color: white;
+        padding: 4rem 2rem;
+        border-radius: 16px;
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+    .hero-buttons {
+        margin-top: 1.5rem;
+    }
+
+        .hero-buttons a {
+            margin: 0 8px;
+            padding: 0.7rem 1.3rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+    .btn-browse {
+        background: white;
+        color: #2563EB;
+    }
+
+    .btn-signup {
+        border: 1px solid white;
+        color: white;
+    }
+
+    /* Cards */
+    .course-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+        }
+
+    .section-title {
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #1E293B;
+    }
+
+    .category-pill {
+        background: #EFF6FF;
+        color: #2563EB;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        display: inline-block;
+        margin: 5px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+</style>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>Learn Anytime, Anywhere</h1>
+    <p>Upgrade your skills with thousands of online courses</p>
+
+    <div class="hero-buttons">
+        <a href="/Course/showAllCourses" class="btn-browse">Browse Courses</a>
+        <a href="/Account/Register" class="btn-signup">Sign Up</a>
+    </div>
+</div>
+
+<!-- FEATURED COURSES -->
+<h4 class="section-title">Featured Courses</h4>
+
+<div class="row g-3 mb-5">
+    <div class="col-md-3">
+        <div class="course-card">
+            <h6>ASP.NET MVC</h6>
+            <p class="text-muted">Beginner to Advanced</p>
+            <small>⭐ 4.8</small>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="course-card">
+            <h6>Data Science</h6>
+            <p class="text-muted">Python & ML</p>
+            <small>⭐ 4.7</small>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="course-card">
+            <h6>UI/UX Design</h6>
+            <p class="text-muted">Figma Basics</p>
+            <small>⭐ 4.6</small>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="course-card">
+            <h6>Cyber Security</h6>
+            <p class="text-muted">Ethical Hacking</p>
+            <small>⭐ 4.9</small>
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORIES -->
+<h4 class="section-title">Top Categories</h4>
+
+<div class="mb-5">
+    <span class="category-pill">Programming</span>
+    <span class="category-pill">Design</span>
+    <span class="category-pill">Business</span>
+    <span class="category-pill">Marketing</span>
+    <span class="category-pill">AI</span>
+    <span class="category-pill">Finance</span>
+</div>
+
+<!-- CTA SECTION -->
+<div class="text-center p-5 bg-white rounded-3 shadow-sm">
+    <h4>Start Learning Today</h4>
+    <p class="text-muted">Join thousands of learners on our platform</p>
+    <a href="/Account/Register" class="btn btn-primary px-4 py-2">Get Started</a>
+</div> *@
+
+
+
+@* @using LMS.BLL.ModelVM
+@model List<CourseVM>
+
+@{
+    ViewData["Title"] = "Home";
+    bool isLoggedIn = User.Identity.IsAuthenticated;
+    bool isInstructor = User.IsInRole("Instructor");
+}
+
+<style>
+
+    /* ================= HERO ================= */
+    .hero {
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        color: white;
+        padding: 3.5rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+        .hero h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+    .hero-actions {
+        margin-top: 1.5rem;
+    }
+
+        .hero-actions a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 0.7rem 1.3rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+    .btn-primary-white {
+        background: white;
+        color: #2563EB;
+    }
+
+    .btn-outline-white {
+        border: 1px solid white;
+        color: white;
+    }
+
+    /* ================= SECTION ================= */
+    .section-title {
+        font-weight: 700;
+        margin: 2rem 0 1rem;
+        color: var(--text-dark);
+    }
+
+    /* ================= COURSES GRID ================= */
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.3rem;
+    }
+
+    .course-card {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #E2E8F0;
+        overflow: hidden;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+        }
+
+    .course-img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .course-body {
+        padding: 1rem;
+        flex-grow: 1;
+    }
+
+    .course-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+    .course-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.4rem;
+    }
+
+    .price.free {
+        color: #16A34A;
+        font-weight: 600;
+    }
+
+    .price.paid {
+        color: #DC2626;
+        font-weight: 600;
+    }
+
+    .course-action {
+        padding: 0.8rem;
+        border-top: 1px solid #E2E8F0;
+    }
+
+    .btn-view {
+        width: 100%;
+        background: var(--primary-blue);
+        color: white;
+        padding: 0.5rem;
+        border-radius: 8px;
+        text-align: center;
+        display: block;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+        .btn-view:hover {
+            background: #1D4ED8;
+        }
+
+    /* ================= CTA ================= */
+    .cta-box {
+        margin-top: 3rem;
+        background: white;
+        padding: 2rem;
+        border-radius: 14px;
+        text-align: center;
+        border: 1px solid #E2E8F0;
+    }
+
+        .cta-box h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-box p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+    .btn-cta {
+        background: var(--primary-blue);
+        color: white;
+        padding: 0.7rem 1.4rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .btn-cta:hover {
+            background: #1D4ED8;
+        }
+
+</style>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+    <h1>Learn Anytime, Anywhere 🚀</h1>
+    <p>Upgrade your skills with thousands of online courses</p>
+
+    <div class="hero-actions">
+        <a href="@Url.Action("Login","Account")" class="btn-primary-white">
+            Sign In
+        </a>
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("Register","Account")" class="btn-outline-white">
+                Sign Up
+            </a>
+        }
+    </div>
+</div>
+
+<!-- ================= FEATURED COURSES ================= -->
+<h4 class="section-title">Featured Courses</h4>
+
+<div class="courses-grid">
+     @foreach (var item in Model)
+    {
+        <div class="course-card">
+
+            <img src="@item.imageURL" class="course-img" />
+
+            <div class="course-body">
+
+                <div class="course-title">
+                    @item.Title
+                </div>
+
+                <div class="course-meta">
+                    <span>@item.Level</span>
+                    <span>@item.Language</span>
+                </div>
+                <div>
+                    <span>@item.Instructor.UserAccount.Fname</span>
+                    <span>@item.Instructor.UserAccount.Lname</span>
+                </div>
+
+                <div class="course-meta">
+                    <span>@item.Category</span>
+
+                    @if (item.isFree == "Free")
+                    {
+                        <span class="price free">Free</span>
+                    }
+                    else
+                    {
+                        <span class="price paid">@item.Price EGP</span>
+                    }
+                </div>
+
+            </div>
+
+            <div class="course-action">
+                <a asp-action="Details"
+                   asp-controller="Course"
+                   asp-route-CourseId="@item.CourseId"
+                   class="btn-view">
+                    View Details
+                </a>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<!-- ================= INSTRUCTOR CTA ================= -->
+@if (!isInstructor)
+{
+     <div class="cta-box">
+        <h4>Want to share your knowledge? 🎓</h4>
+        <p>Become an instructor and start teaching students worldwide</p>
+
+        <a href="@Url.Action("RegisterInstructor","Account")" class="btn-cta">
+            Become an Instructor
+        </a>
+    </div>
+} *@
+
+
+
+
+@*   @using LMS.BLL.ModelVM
+@model List<CourseVM>
+
+@{
+    ViewData["Title"] = "Home";
+    bool isLoggedIn = User.Identity.IsAuthenticated;
+    bool isInstructor = User.IsInRole("Instructor");
+
+    List<string> categories = ViewBag.Categories as List<string>;
+}
+
+<style>
+
+    /* ================= HERO ================= */
+    .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: white;
+    padding: 3rem;
+    border-radius: 18px;
+    margin-bottom: 2.5rem;
+    gap: 2rem;
+    }
+
+    .hero-text {
+    flex: 1;
+    }
+
+    .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    }
+
+    .hero p {
+    opacity: 0.9;
+    margin-top: 10px;
+    }
+
+    .hero img {
+    width: 320px;
+    max-width: 100%;
+    border-radius: 14px;
+    }
+
+    .hero-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    }
+
+    .btn-primary-white {
+    background: white;
+    color: #2563EB;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    }
+
+    .btn-outline-white {
+    border: 1px solid white;
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    }
+
+    /* ================= CATEGORY SECTION ================= */
+    .category-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+    color: var(--text-dark);
+    }
+
+    .category-block {
+    margin-bottom: 2.5rem;
+    }
+
+    .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.2rem;
+    }
+
+    .course-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+    }
+
+    .course-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    }
+
+    .course-body {
+    padding: 1rem;
+    }
+
+    .course-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    }
+
+    .course-meta {
+    font-size: 0.8rem;
+    color: gray;
+    display: flex;
+    justify-content: space-between;
+    }
+
+    .price.free {
+    color: #16A34A;
+    font-weight: 600;
+    }
+
+    .price.paid {
+    color: #DC2626;
+    font-weight: 600;
+    }
+
+    .btn-view {
+    display: block;
+    text-align: center;
+    padding: 0.6rem;
+    background: #2563EB;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 0.8rem;
+    font-size: 0.85rem;
+    }
+
+    /* ================= INSTRUCTOR CTA ================= */
+    .instructor-cta {
+    margin-top: 3rem;
+    background: linear-gradient(135deg, #0F172A, #1E293B);
+    color: white;
+    padding: 3rem;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    }
+
+    .instructor-cta h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    }
+
+    .instructor-cta p {
+    opacity: 0.8;
+    }
+
+    .btn-cta {
+    background: #2563EB;
+    color: white;
+    padding: 0.8rem 1.4rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    }
+
+</style>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+
+    <div class="hero-text">
+        <h1>Learn Anytime, Anywhere 🚀</h1>
+        <p>Upgrade your skills with thousands of online courses and expert instructors</p>
+
+        <div class="hero-actions">
+
+            <a href="@Url.Action("Login","Account")" class="btn-primary-white">
+                Sign In
+            </a>
+
+            @if (!isLoggedIn)
+            {
+                <a href="@Url.Action("Register","Account")" class="btn-outline-white">
+                    Sign Up
+                </a>
+            }
+
+        </div>
+    </div>
+
+    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" />
+</div>
+
+<!-- ================= COURSES BY CATEGORY ================= -->
+@foreach (var cat in ViewBag.Categories)
+{
+    var coursesInCategory = Model.Where(c => c.Category == cat).ToList();
+
+    <div class="category-block">
+
+        <div class="category-title">
+            @cat
+        </div>
+
+        <div class="courses-grid">
+
+            @if (coursesInCategory.Any())
+            {
+                foreach (var item in coursesInCategory)
+                {
+                    <div class="course-card">
+
+                        <img src="@item.imageURL" class="course-img" />
+
+                        <div class="course-body">
+
+                            <div class="course-title">
+                                @item.Title
+                            </div>
+
+                            <div class="course-meta">
+                                <span>@item.Level</span>
+                                <span>@item.Language</span>
+                            </div>
+
+                            <div class="course-meta">
+                                <span>@item.Instructor.UserAccount.Fname @item.Instructor.UserAccount.Lname</span>
+
+                                @if (item.isFree == "Free")
+                                {
+                                    <span class="price free">Free</span>
+                                }
+                                else
+                                {
+                                    <span class="price paid">@item.Price EGP</span>
+                                }
+                            </div>
+
+                        </div>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-action="Details"
+                            asp-controller="Course"
+                           asp-route-CourseId="@item.CourseId"
+                           class="btn-view">
+                            View Details
+                            </a>
+                        }
+
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="color:gray;">No courses in this category yet.</p>
+            }
+
+        </div>
+    </div>
+}
+
+<!-- ================= INSTRUCTOR CTA ================= -->
+@if (!isInstructor)
+{
+    <div class="instructor-cta">
+
+        <div>
+            <h2>Become an Instructor 🎓</h2>
+            <p>Share your knowledge, create courses, and earn money while teaching others.</p>
+        </div>
+
+        <a href="@Url.Action("RegisterInstructor","Account")" class="btn-cta">
+            Start Teaching
+        </a>
+
+    </div>
+} *@
+
+
+@* 
+                @using LMS.BLL.ModelVM
+@model List<CourseVM>
+
+@{
+    ViewData["Title"] = "Home";
+    bool isLoggedIn = User.Identity.IsAuthenticated;
+    bool isInstructor = User.IsInRole("Instructor");
+
+    List<string> categories = ViewBag.Categories as List<string>;
+}
+
+<style>
+
+    /* ================= HERO ================= */
+    .hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        color: white;
+        padding: 3rem;
+        border-radius: 18px;
+        margin-bottom: 2.5rem;
+        gap: 2rem;
+    }
+
+    .hero-text {
+        flex: 1;
+    }
+
+    .hero h1 {
+        font-size: 2.4rem;
+        font-weight: 800;
+    }
+
+    .hero p {
+        opacity: 0.9;
+        margin-top: 10px;
+    }
+
+    .hero img {
+        width: 320px;
+        border-radius: 14px;
+    }
+
+    .hero-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary-white {
+        background: white;
+        color: #2563EB;
+        padding: 0.7rem 1.2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .btn-outline-white {
+        border: 1px solid white;
+        color: white;
+        padding: 0.7rem 1.2rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    /* ================= CATEGORY ================= */
+    .category-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 2rem 0 1rem;
+        color: var(--text-dark);
+    }
+
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.3rem;
+    }
+
+    /* ================= COURSE CARD (UPGRADED) ================= */
+    .course-card {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #E2E8F0;
+        overflow: hidden;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+        .course-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+        }
+
+    .img-wrapper {
+        position: relative;
+        height: 160px;
+    }
+
+    .course-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* badge */
+    .badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #2563EB;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+        .badge.free {
+            background: #16A34A;
+        }
+
+    .course-body {
+        padding: 1rem;
+    }
+
+    .course-title {
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+        color: #0F172A;
+    }
+
+    .course-instructor {
+        font-size: 0.8rem;
+        color: #64748B;
+        margin-bottom: 0.5rem;
+    }
+
+    .course-meta {
+        font-size: 0.8rem;
+        color: #64748B;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.4rem;
+    }
+
+    /* rating UI */
+    .rating {
+        font-size: 0.8rem;
+        color: #F59E0B;
+    }
+
+    .price.free {
+        color: #16A34A;
+        font-weight: 700;
+    }
+
+    .price.paid {
+        color: #DC2626;
+        font-weight: 700;
+    }
+
+    /* button */
+    .btn-view {
+        display: block;
+        text-align: center;
+        padding: 0.65rem;
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        margin: 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-view:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+    /* ================= INSTRUCTOR CTA (MORE ATTRACTIVE) ================= */
+    .instructor-cta {
+        margin-top: 3rem;
+        background: linear-gradient(135deg, #0F172A, #1E293B);
+        color: white;
+        padding: 3rem;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .instructor-cta::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(37,99,235,0.2);
+            border-radius: 50%;
+            top: -80px;
+            right: -80px;
+        }
+
+        .instructor-cta h2 {
+            font-size: 1.9rem;
+            font-weight: 900;
+        }
+
+        .instructor-cta p {
+            opacity: 0.85;
+        }
+
+    .btn-cta {
+        background: #2563EB;
+        color: white;
+        padding: 0.9rem 1.5rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+</style>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+
+    <div class="hero-text">
+        <h1>Learn Anytime, Anywhere 🚀</h1>
+        <p>Upgrade your skills with thousands of online courses and expert instructors</p>
+
+        <div class="hero-actions">
+
+            <a href="@Url.Action("Login","Account")" class="btn-primary-white">
+                Sign In
+            </a>
+
+            @if (!isLoggedIn)
+            {
+                <a href="@Url.Action("Register","Account")" class="btn-outline-white">
+                    Sign Up
+                </a>
+            }
+
+        </div>
+    </div>
+
+    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" />
+</div>
+
+<!-- ================= COURSES BY CATEGORY ================= -->
+@foreach (var cat in categories)
+{
+    var coursesInCategory = Model.Where(c => c.Category == cat).ToList();
+
+    <div class="category-title">@cat</div>
+
+    <div class="courses-grid">
+
+        @if (coursesInCategory.Any())
+        {
+            foreach (var item in coursesInCategory)
+            {
+                <div class="course-card">
+
+                    <div class="img-wrapper">
+
+                        <img src="@item.imageURL" class="course-img" />
+
+                        @if (item.isFree == "Free")
+                        {
+                            <div class="badge free">FREE</div>
+                        }
+                        @* else
+                        {
+                            <div class="badge">PAID</div>
+                        }
+
+                    </div>
+
+                    <div class="course-body">
+
+                        <div class="course-title">
+                            @item.Title
+                        </div>
+
+                        <div class="course-instructor">
+                            👨‍🏫 @item.Instructor.UserAccount.Fname @item.Instructor.UserAccount.Lname
+                        </div>
+
+                        <div class="course-meta">
+                            <span>@item.Level</span>
+                            <span>@item.Language</span>
+                        </div>
+
+                        <div class="course-meta">
+                             <span class="rating">⭐⭐⭐⭐☆</span>
+
+                            @if (item.isFree == "Free")
+                            {
+                                <span class="price free">Free</span>
+                            }
+                            else
+                            {
+                                <span class="price paid">@item.Price EGP</span>
+                            }
+                        </div>
+
+                    </div>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-action="Details"
+                           asp-controller="Course"
+                           asp-route-CourseId="@item.CourseId"
+                           class="btn-view">
+                            View Details
+                        </a>
+                    }
+
+                </div>
+            }
+        }
+        else
+        {
+            <p style="color:gray;">No courses in this category yet.</p>
+        }
+
+    </div>
+}
+
+<!-- ================= INSTRUCTOR CTA ================= -->
+@if (!isInstructor)
+{
+    <div class="instructor-cta">
+
+        <div>
+            <h2>Become an Instructor 🎓</h2>
+            <p>Share your knowledge, build courses, and earn money while teaching others worldwide.</p>
+        </div>
+
+        <a href="@Url.Action("RegisterInstructor","Account")" class="btn-cta">
+            Start Teaching
+        </a>
+
+    </div>
+} *@
+
+
+            @using LMS.BLL.ModelVM
+@model List<CourseVM>
+
+@{
+    ViewData["Title"] = "Home";
+    bool isLoggedIn = User.Identity.IsAuthenticated;
+    bool isInstructor = User.IsInRole("Instructor");
+
+    List<string> categories = ViewBag.Categories as List<string>;
+}
+
+<style>
+
+    /* ================= HERO ================= */
+    .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: white;
+    padding: 3rem;
+    border-radius: 18px;
+    margin-bottom: 2.5rem;
+    gap: 2rem;
+    }
+
+    .hero-text {
+    flex: 1;
+    }
+
+    .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    }
+
+    .hero p {
+    opacity: 0.9;
+    margin-top: 10px;
+    }
+
+    .hero img {
+    width: 320px;
+    border-radius: 14px;
+    }
+
+    .hero-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    }
+
+    .btn-primary-white {
+    background: white;
+    color: #2563EB;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    }
+
+    .btn-outline-white {
+    border: 1px solid white;
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    }
+
+    /* ================= CATEGORY ================= */
+    .category-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin: 2.5rem 0 1rem;
+    color: #0F172A;
+    }
+
+    .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.3rem;
+    }
+
+    /* ================= COURSE CARD (IMPROVED) ================= */
+    .course-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    }
+
+    .course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+    }
+
+    .img-wrapper {
+    position: relative;
+    height: 160px;
+    }
+
+    .course-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+
+    /* badge */
+    .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #2563EB;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    }
+
+    .badge.free {
+    background: #16A34A;
+    }
+
+    /* ================= BODY ================= */
+    .course-body {
+    padding: 1rem;
+    }
+
+    .course-title {
+    font-weight: 900;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    color: #0F172A;
+    }
+
+    /* instructor improved */
+    .instructor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #64748B;
+    margin-bottom: 0.6rem;
+    }
+
+    .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #2563EB;
+    color: white;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    }
+
+    /* meta pills */
+    .meta-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+    }
+
+    .pill {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: #F1F5F9;
+    color: #475569;
+    font-weight: 600;
+    }
+
+    /* price */
+    .price.free {
+    color: #16A34A;
+    font-weight: 800;
+    }
+
+    .price.paid {
+    color: #DC2626;
+    font-weight: 800;
+    }
+
+    /* button */
+    .btn-view {
+    display: block;
+    text-align: center;
+    padding: 0.65rem;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    margin: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: 0.3s;
+    }
+
+    .btn-view:hover {
+    transform: scale(1.02);
+    opacity: 0.9;
+    }
+
+    /* ================= CTA ================= */
+    .instructor-cta {
+    margin-top: 3rem;
+    background: linear-gradient(135deg, #0F172A, #1E293B);
+    color: white;
+    padding: 3rem;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+    .btn-cta {
+    background: #2563EB;
+    padding: 0.9rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+    }
+
+</style>
+@* 
+<!-- ================= HERO ================= -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="hero">
+
+        <div class="hero-text">
+
+            <h1>Learn Anytime, Anywhere 🚀</h1>
+            <p>Upgrade your skills with expert instructors and thousands of courses</p>
+
+            <div class="hero-actions">
+
+                <a href="@Url.Action("Login","Account")" class="btn-primary-white">
+                    Sign In
+                </a>
+
+           
+                <a href="@Url.Action("Register","Account")" class="btn-outline-white">
+                    Sign Up
+                </a>
+
+
+            </div>
+            
+
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" />
+    </div>
+} *@
+
+<!-- ================= HERO ================= -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <!-- ================= GUEST HERO ================= -->
+    <div class="hero">
+
+        <div class="hero-text">
+            <h1>Learn Anytime, Anywhere 🚀</h1>
+            <p>Upgrade your skills with expert instructors and thousands of courses</p>
+
+            <div class="hero-actions">
+                <a href="@Url.Action("Login","Account")" class="btn-primary-white">
+                    Sign In
+                </a>
+
+                <a href="@Url.Action("Register","Account")" class="btn-outline-white">
+                    Sign Up
+                </a>
+            </div>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" />
+    </div>
+}
+else if (User.IsInRole("Instructor"))
+{
+    <!-- ================= INSTRUCTOR HERO ================= -->
+    <div class="hero">
+
+        <div class="hero-text">
+            <h1>Start Teaching Today 🎓</h1>
+            <p>Create courses, share your knowledge, and earn money</p>
+
+            <div class="hero-actions">
+              @*   <a href="@Url.Action("createCourse","Course")" class="btn-primary-white">
+                    + Create Course
+                </a> *@
+
+                <a class="btn-primary-white" asp-controller="Course" asp-action="createCourse">
+                    <i class="fa-solid fa-plus me-1"></i> Create Course
+                </a>
+
+                <a href="@Url.Action("MyCourses","Course")" class="btn-outline-white">
+                    Manage Courses
+                </a>
+            </div>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b" />
+    </div>
+}
+else
+{
+    <!-- ================= STUDENT HERO ================= -->
+    <div class="hero">
+
+        <div class="hero-text">
+            <h1>Welcome Back 👋</h1>
+            <p>Continue your learning journey and explore new courses</p>
+
+            <div class="hero-actions">
+                <a href="@Url.Action("MyCourses","Course")" class="btn-primary-white">
+                    My Courses
+                </a>
+
+                @* <a href="@Url.Action("showAllCourses","Course")" class="btn-outline-white">
+                    Browse Courses
+                </a> *@
+            </div>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" />
+    </div>
+}
+<!-- ================= COURSES ================= -->
+@foreach (var cat in categories)
+{
+    var coursesInCategory = Model.Where(c => c.Category == cat).ToList();
+
+    if(coursesInCategory.Any())
+    {
+    <div class="category-title">@cat</div>
+
+    <div class="courses-grid">
+
+        @foreach (var item in coursesInCategory)
+        {
+            <div class="course-card">
+
+                <div class="img-wrapper">
+
+                    <img src="@item.imageURL" class="course-img" />
+
+                    @if (item.isFree == "Free")
+                    {
+                        <div class="badge free">FREE</div>
+                    }
+
+                </div>
+
+                <div class="course-body">
+
+                    <div class="course-title">
+                        @item.Title
+                    </div>
+
+                    <!-- Instructor improved -->
+                    <div class="instructor">
+                        <div class="avatar">
+                            @item.Instructor.UserAccount.Fname.Substring(0, 1)
+                        </div>
+                        <span>
+                            @item.Instructor.UserAccount.Fname @item.Instructor.UserAccount.Lname
+                        </span>
+                    </div>
+
+                    <!-- Meta pills -->
+                    <div class="meta-row">
+                        <span class="pill">@item.Level</span>
+                        <span class="pill">@item.Language</span>
+                        <span class="pill">@item.Category</span>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                        @if (item.isFree == "Free")
+                        {
+                            <span class="price free">Free</span>
+                        }
+                        else
+                        {
+                            <span class="price paid">@item.Price $</span>
+                        }
+                    </div>
+
+                </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Details"
+                       asp-controller="Course"
+                       asp-route-CourseId="@item.CourseId"
+                       class="btn-view">
+                        View Details
+                    </a>
+                }
+
+            </div>
+        }
+
+    </div>
+    }
+}
+
+<!-- ================= CTA ================= -->
+@if (!isInstructor)
+{
+    <div class="instructor-cta">
+
+        <div>
+            <h2>Become an Instructor 🎓</h2>
+            <p>Share your knowledge and start earning from your courses.</p>
+        </div>
+
+        <a href="@Url.Action("RegisterInstructor","Account")" class="btn-cta">
+            Start Teaching
+        </a>
+
+    </div>
+}

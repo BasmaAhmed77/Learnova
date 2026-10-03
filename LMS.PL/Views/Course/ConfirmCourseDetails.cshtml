@@ -1,0 +1,179 @@
+﻿@model LMS.BLL.ModelVM.CourseVM
+
+@{
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+
+@{
+    ViewData["Title"] = "Confirm Course Details";
+}
+
+<style>
+    .details-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: 1px solid #E2E8F0;
+    }
+
+    .details-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-dark);
+    }
+
+    .details-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.9rem 0;
+        border-bottom: 1px solid #F1F5F9;
+    }
+
+    .details-label {
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+
+    .details-value {
+        color: var(--text-dark);
+        font-weight: 500;
+        max-width: 60%;
+        text-align: right;
+    }
+
+    .badge-custom {
+        background: #EFF6FF;
+        color: var(--primary-blue);
+        padding: 0.3rem 0.7rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .price-free {
+        color: #16A34A;
+        font-weight: 700;
+    }
+
+    .price-paid {
+        color: #DC2626;
+        font-weight: 700;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+        .actions form {
+            flex: 1;
+        }
+
+    .btn-primary-custom {
+        width: 100%;
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+
+        .btn-primary-custom:hover {
+            background: #1D4ED8;
+            transform: translateY(-1px);
+        }
+
+    .btn-secondary-custom {
+        width: 100%;
+        background: transparent;
+        color: var(--primary-blue);
+        border: 1px solid var(--primary-blue);
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #EFF6FF;
+        }
+
+</style>
+
+<div class="details-card">
+
+    <div class="details-title">📘 Course Details</div>
+
+    <div class="details-row">
+        <div class="details-label">Title</div>
+        <div class="details-value">@Model.Title</div>
+    </div>
+
+    <div class="details-row">
+        <div class="details-label">Description</div>
+        <div class="details-value">@Model.Description</div>
+    </div>
+
+    <div class="details-row">
+        <div class="details-label">Category</div>
+        <div class="details-value">
+            <span class="badge-custom">@Model.Category</span>
+        </div>
+    </div>
+
+    <div class="details-row">
+        <div class="details-label">Level</div>
+        <div class="details-value">
+            <span class="badge-custom">@Model.Level</span>
+        </div>
+    </div>
+
+    <div class="details-row">
+        <div class="details-label">Language</div>
+        <div class="details-value">@Model.Language</div>
+    </div>
+
+    <div class="details-row">
+        <div class="details-label">Price</div>
+        <div class="details-value">
+            @if (Model.isFree == "Free")
+            {
+                <span class="price-free">Free</span>
+            }
+            else
+            {
+                <span class="price-paid">@Model.Price $</span>
+            }
+        </div>
+    </div>
+
+    <div class="actions">
+
+        <form method="get" asp-action="showCourseDetailsToEdit" asp-controller="Course">
+            <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+
+            <button type="submit" class="btn-primary-custom">
+                <i class="fa-solid fa-check me-1"></i>
+                Confirm
+            </button>
+        </form>
+
+        <form method="post" asp-action="editCourse" asp-controller="Course">
+            <input type="hidden" asp-for="CourseId" />
+
+            <button type="submit" class="btn-secondary-custom">
+                <i class="fa-solid fa-pen me-1"></i>
+                Edit Course
+            </button>
+        </form>
+
+    </div>
+
+</div>

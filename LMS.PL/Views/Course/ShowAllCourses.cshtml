@@ -1,0 +1,196 @@
+﻿@using LMS.BLL.ModelVM;
+@model List<CourseVM>
+
+@{
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<style>
+
+    .page-header {
+    margin-bottom: 2rem;
+    }
+
+    .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    }
+
+    .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    }
+
+    .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.5rem;
+    }
+
+    .course-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+    transition: 0.25s;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.05);
+    }
+
+    .course-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    }
+
+    .course-body {
+    padding: 1rem;
+    flex-grow: 1;
+    }
+
+    .course-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+    }
+
+    .course-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    }
+
+    .badge-level {
+    background: #EFF6FF;
+    color: var(--primary-blue);
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    }
+
+    .price {
+    font-weight: 600;
+    font-size: 0.85rem;
+    }
+
+    .free {
+    color: #16A34A;
+    }
+
+    .paid {
+    color: #DC2626;
+    }
+
+    .course-action {
+    padding: 0.8rem;
+    border-top: 1px solid #E2E8F0;
+    }
+
+    .btn-view {
+    width: 100%;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.55rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: 0.3s;
+    }
+
+    .btn-view:hover {
+    background: #1D4ED8;
+    }
+    .custom-alert {
+    margin-top: 1.2rem;
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    color: #065F46;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .custom-alert i {
+    color: #10B981;
+    }
+
+</style>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="custom-alert">
+        <i class="fa-solid fa-circle-check"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+<div class="page-header">
+    <div class="page-title">Explore Courses 📚</div>
+    <div class="page-subtitle">Browse and discover new skills</div>
+</div>
+
+<div class="courses-grid">
+
+    @foreach (var item in Model)
+    {
+        <div class="course-card">
+
+            <img src="@item.imageURL" class="course-img" />
+
+            <div class="course-body">
+
+                <div class="course-title">
+                    @item.Title
+                </div>
+
+                <div class="course-meta">
+                    <span class="badge-level">@item.Level</span>
+                    <span>@item.Language</span>
+                </div>
+
+                <div class="course-meta">
+                    <span>@item.Category</span>
+
+                    @if (item.isFree == "Free")
+                    {
+                        <span class="price free">Free</span>
+                    }
+                    else
+                    {
+                        <span class="price paid">@item.Price $</span>
+                    }
+                </div>
+
+            </div>
+           
+                <div class="course-action">
+                    <div class="d-flex flex-column gap-2">
+                        <a asp-action="Details"
+                           asp-controller="Course"
+                           asp-route-CourseId="@item.CourseId"
+                           class="btn-view text-center text-decoration-none">
+                            View Details
+                        </a>
+                    </div>
+                </div> 
+            
+        </div>
+    }
+
+</div>

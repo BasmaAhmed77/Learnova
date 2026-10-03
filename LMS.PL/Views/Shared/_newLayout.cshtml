@@ -1,0 +1,648 @@
+﻿@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+        --primary-blue: #2563EB;
+        --main-bg: #F8FAFC;
+        --text-dark: #1E293B;
+        --text-muted: #64748B;
+        --nav-bg: #FFFFFF;
+        }
+
+        body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--main-bg);
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+        .custom-navbar {
+        background: var(--nav-bg);
+        padding: 0.75rem 2rem;
+        border-bottom: 1px solid #E2E8F0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        }
+
+        .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        }
+
+        .brand-logo {
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: var(--primary-blue);
+        text-decoration: none;
+        }
+
+        /* ================= NAV LINKS ================= */
+        .nav-links-wrapper {
+        display: flex;
+        gap: 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+
+        .nav-link-item {
+        color: var(--text-muted);
+        text-decoration: none;
+        padding: 0.4rem 0.7rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: 0.2s;
+        }
+
+        .nav-link-item:hover {
+        color: var(--primary-blue);
+        background: #EFF6FF;
+        }
+
+        /* ================= CATEGORY DROPDOWN ================= */
+        .dropdown-menu {
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        }
+
+        .category-link {
+        font-size: 0.9rem;
+        }
+
+        /* ================= SEARCH ================= */
+        .search-box {
+        display: flex;
+        align-items: center;
+        background: #F1F5F9;
+        border-radius: 12px;
+        padding: 0.4rem 0.7rem;
+        width: 400px;
+        transition: 0.3s;
+        border: 1px solid transparent;
+        }
+
+        .search-box:focus-within {
+        background: white;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .search-box input {
+        border: none;
+        outline: none;
+        background: transparent;
+        width: 100%;
+        font-size: 0.9rem;
+        margin-left: 6px;
+        }
+
+        .search-box button {
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        }
+
+        .search-box button:hover {
+        color: var(--primary-blue);
+        }
+
+        /* ================= RIGHT ================= */
+        .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        }
+
+        .nav-link-item i {
+        font-size: 0.95rem;
+        }
+
+        .btn-create-header {
+        background: var(--primary-blue);
+        color: white !important;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.85rem;
+        }
+
+        .btn-create-header:hover {
+        background: #1D4ED8;
+        }
+
+        .user-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        }
+
+        /* ================= LAYOUT ================= */
+        .main-container {
+        flex-grow: 1;
+        padding: 2rem;
+        max-width: 1400px;
+        margin: auto;
+        width: 100%;
+        }
+
+        footer {
+        background: white;
+        padding: 1rem;
+        text-align: center;
+        border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="custom-navbar">
+
+        <!-- LEFT -->
+        <div class="nav-left">
+
+            <a class="brand-logo" asp-controller="Course" asp-action="showAllCourses">
+                Learnova
+            </a>
+
+            <ul class="nav-links-wrapper">
+                @*                 <li><a class="nav-link-item" asp-controller="Course" asp-action="showAllCourses">Home</a></li>
+ 
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li><a class="nav-link-item" asp-controller="Course" asp-action="MyCourses">My Courses</a></li>
+                }
+                <!-- ================= CATEGORIES DROPDOWN ================= -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link-item dropdown-toggle" data-bs-toggle="dropdown">
+                        Categories
+                    </a>
+
+                    <ul class="dropdown-menu p-2">
+                        @foreach (var cat in ViewBag.Categories as List<string>)
+                        {
+                            <li>
+                                <a class="dropdown-item category-link"
+                                   asp-controller="Course"
+                                   asp-action="showAllCourses"
+                                   asp-route-category="@cat">
+                                    @cat
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+
+        <!-- ================= SEARCH ================= -->
+        <form asp-controller="Course" asp-action="Search" method="get" class="search-box">
+            <button type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+            <input type="text"
+                   name="query"
+                   placeholder="Search courses..."
+                   autocomplete="on" />
+        </form>
+
+        <!-- RIGHT -->
+        <div class="nav-right">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Course"
+                   asp-action="Favorites"
+                   class="nav-link-item position-relative d-flex align-items-center gap-1">
+
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="d-none d-md-inline">Favorites</span>
+
+                    <!-- optional badge -->
+                    <span class="badge bg-danger rounded-pill"
+                          style="font-size:0.6rem;">
+                        3
+                    </span>
+                </a>
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                @if (User.IsInRole("Instructor"))
+                {
+                    <a class="btn-create-header" asp-controller="Course" asp-action="createCourse">
+                        + Create Course
+                    </a>
+                }
+
+                <div class="dropdown">
+                    <a class="d-flex align-items-center dropdown-toggle text-decoration-none"
+                       data-bs-toggle="dropdown">
+
+                        <img src="https://ui-avatars.com/api/?name=@User.Identity.Name&background=2563EB&color=fff"
+                             class="user-avatar me-2" />
+
+                        <span>@User.Identity.Name</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button class="dropdown-item text-danger">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <a class="nav-link-item" asp-controller="Account" asp-action="Login">Sign In</a>
+                <a class="nav-link-item" asp-controller="Account" asp-action="Register">Sign Up</a>
+                <a class="btn-create-header" asp-controller="Account" asp-action="RegisterInstructor">
+                    Become Instructor
+                </a>
+            }
+
+        </div>
+
+    </header>
+
+    <main class="main-container">
+         @RenderBody()
+     </main>
+
+    <footer>
+        &copy; 2026 - Learnova
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html> *@
+
+
+
+
+
+@{
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #2563EB;
+            --main-bg: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --nav-bg: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--main-bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .custom-navbar {
+            background: var(--nav-bg);
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .nav-links-wrapper {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link-item {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.4rem 0.7rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+            .nav-link-item:hover {
+                color: var(--primary-blue);
+                background: #EFF6FF;
+            }
+
+        /* AUTH BUTTONS */
+        .auth-link {
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.55rem 0.9rem;
+            border-radius: 10px;
+            transition: 0.25s;
+            text-decoration: none;
+        }
+
+        .sign-in-btn {
+            color: var(--text-dark);
+        }
+
+            .sign-in-btn:hover {
+                background: #F1F5F9;
+                color: var(--primary-blue);
+            }
+
+        .sign-up-btn {
+            border: 1px solid #E2E8F0;
+            color: var(--primary-blue);
+        }
+
+            .sign-up-btn:hover {
+                background: #EFF6FF;
+            }
+
+        .btn-create-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white !important;
+            padding: 0.65rem 1.3rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+            .btn-create-header:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+            }
+
+
+        /* DROPDOWN */
+        .dropdown-menu {
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+        }
+
+        /* SEARCH */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #F1F5F9;
+            border-radius: 12px;
+            padding: 0.4rem 0.7rem;
+            width: 400px;
+            border: 1px solid transparent;
+        }
+
+            .search-box:focus-within {
+                background: white;
+                border-color: var(--primary-blue);
+                box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+            }
+
+            .search-box input {
+                border: none;
+                outline: none;
+                background: transparent;
+                width: 100%;
+                font-size: 0.9rem;
+                margin-left: 6px;
+            }
+
+            .search-box button {
+                border: none;
+                background: transparent;
+                color: #94a3b8;
+            }
+
+                .search-box button:hover {
+                    color: var(--primary-blue);
+                }
+
+        /* RIGHT */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+        }
+
+        /* MAIN */
+        .main-container {
+            flex-grow: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: auto;
+            width: 100%;
+        }
+
+        footer {
+            background: white;
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="custom-navbar">
+
+        <!-- LEFT -->
+        <div class="nav-left">
+
+            <a class="brand-logo" asp-controller="Home" asp-action="Index">
+                Learnova
+            </a>
+
+            <ul class="nav-links-wrapper">
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a class="nav-link-item" asp-controller="Course" asp-action="MyCourses">
+                            My Courses
+                        </a>
+                    </li>
+                }
+
+                <!-- Categories -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link-item dropdown-toggle" data-bs-toggle="dropdown">
+                        Categories
+                    </a>
+
+                    <ul class="dropdown-menu p-2">
+                        @if (categories.Any())
+                        {
+                            foreach (var cat in categories)
+                            {
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Course"
+                                       asp-action="showAllCourses"
+                                       asp-route-category="@cat">
+                                        @cat
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li><span class="dropdown-item text-muted">No categories</span></li>
+                        }
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+
+        <!-- SEARCH -->
+        <form asp-controller="Course" asp-action="Search" method="get" class="search-box">
+            <button type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+            <input type="text" name="query" placeholder="Search courses..." />
+        </form>
+
+        <!-- RIGHT -->
+        <div class="nav-right">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Course"
+                   asp-action="Favorites"
+                   class="nav-link-item d-flex align-items-center gap-1">
+
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="d-none d-md-inline">Favorites</span>
+                </a>
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                @if (User.IsInRole("Instructor"))
+                {
+                    <a class="btn-create-header me-3" asp-controller="Course" asp-action="createCourse">
+                        <i class="fa-solid fa-plus me-1"></i> Create Course
+                    </a>
+                    // <a class="btn-create-header" asp-controller="Course" asp-action="createCourse">
+                    //     + Create Course
+                    // </a>
+                }
+
+                <div class="dropdown">
+                    <a class="d-flex align-items-center dropdown-toggle text-decoration-none"
+                       data-bs-toggle="dropdown">
+
+                        <img src="https://ui-avatars.com/api/?name=@User.Identity.Name&background=2563EB&color=fff"
+                             class="user-avatar me-2" />
+
+                        <span>@User.Identity.Name</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button class="dropdown-item text-danger">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <a class="auth-link sign-in-btn" asp-controller="Account" asp-action="Login">
+                    Sign In
+                </a>
+
+                <a class="auth-link sign-up-btn" asp-controller="Account" asp-action="Register">
+                    Sign Up
+                </a>
+
+                <a class="btn-create-header" asp-controller="Account" asp-action="RegisterInstructor">
+                    🚀 Become Instructor
+                </a>
+            }
+
+        </div>
+
+    </header>
+
+    <main class="main-container">
+        @RenderBody()
+    </main>
+
+    <footer>
+        &copy; 2026 - Learnova
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

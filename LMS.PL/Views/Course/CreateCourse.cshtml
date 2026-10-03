@@ -1,0 +1,189 @@
+﻿@model LMS.BLL.ModelVM.CourseVM
+
+@{
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+
+@{
+    ViewData["Title"] = "Create Course";
+}
+
+<style>
+    .form-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: 1px solid #E2E8F0;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #1E293B;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        color: #334155;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 0.6rem 0.9rem;
+        border: 1px solid #CBD5F5;
+        transition: 0.2s;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .submit-btn {
+        background: #2563EB;
+        color: white !important;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .submit-btn:hover {
+            background: #1D4ED8;
+            transform: translateY(-1px);
+        }
+
+    .price-box {
+        margin-top: 0.5rem;
+    }
+
+    .upload-box {
+        border: 2px dashed #CBD5F5;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+        .upload-box:hover {
+            border-color: #2563EB;
+            background: #F8FAFF;
+        }
+
+    .file-input {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="form-card">
+
+    <div class="form-title">Create New Course</div>
+
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <form method="post" asp-action="addCourse" asp-controller="Course" enctype="multipart/form-data">
+
+        <input type="hidden" asp-for="InstructorId" />
+
+        <div class="form-grid">
+
+            <div class="full-width">
+                <label class="form-label">Course Title</label>
+                <input type="text" asp-for="Title" class="form-control" placeholder="Enter Course Title..." />
+            </div>
+
+            <div class="full-width">
+                <label class="form-label">Course Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter Course Description..."></textarea>
+            </div>
+
+            <div class="full-width">
+                <label class="form-label">Course Image</label>
+
+                <div class="upload-box">
+                    <input type="file" name="imageFile" accept=".png,.jpg,.jpeg" class="form-control file-input" />
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Category</label>
+                <select asp-for="Category" class="form-select">
+                    @foreach (var item in ViewBag.categories)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label class="form-label">Level</label>
+                <select asp-for="Level" class="form-select">
+                    @foreach (var item in ViewBag.levels)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label class="form-label">Language</label>
+                <select asp-for="Language" class="form-select">
+                    @foreach (var item in ViewBag.languages)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label class="form-label">Course Type</label>
+                <select asp-for="isFree" class="form-select" id="priceType">
+                    <option value="Free">Free</option>
+                    <option value="Paid">Paid</option>
+                </select>
+
+                <div id="priceField" class="price-box">
+                    <label class="form-label">Enter Price</label>
+                    <input type="number" asp-for="Price" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+
+        <button type="submit" class="submit-btn mt-3">
+            <i class="fa-solid fa-plus me-1"></i> Create
+        </button>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const priceType = document.getElementById("priceType");
+        const priceField = document.getElementById("priceField");
+
+        function togglePrice() {
+            priceField.style.display = priceType.value === "Paid" ? "block" : "none";
+        }
+
+        togglePrice();
+        priceType.addEventListener("change", togglePrice);
+    </script>
+}

@@ -1,0 +1,114 @@
+﻿@using LMS.BLL.ModelVM;
+@model LessonVM
+
+@{
+    ViewData["Title"] = "Lesson Details";
+}
+
+<style>
+
+    .lesson-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1.8rem;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .lesson-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .video-wrapper {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+        .actions form {
+            flex: 1;
+        }
+
+    .btn-primary-custom {
+        width: 100%;
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.65rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-primary-custom:hover {
+            background: #1D4ED8;
+            transform: translateY(-1px);
+        }
+
+    .btn-secondary-custom {
+        width: 100%;
+        background: transparent;
+        color: var(--primary-blue);
+        border: 1px solid var(--primary-blue);
+        padding: 0.65rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #EFF6FF;
+        }
+
+</style>
+
+<div class="lesson-card">
+
+    <div class="lesson-title">📺 @Model.Title</div>
+
+    <div class="video-wrapper">
+        <div class="ratio ratio-16x9">
+            <iframe src="https://www.youtube.com/embed/@Model.videoID"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="actions">
+
+         <form method="post" asp-action="createLesson" asp-controller="Lesson">
+            <input type="hidden" asp-for="CourseId" />
+
+            <button type="submit" class="btn-secondary-custom">
+                <i class="fa-solid fa-plus me-1"></i>
+                Add Another Lesson
+            </button>
+        </form>
+
+        <form method="post" asp-action="Details" asp-controller="Course">
+            <input type="hidden" asp-for="CourseId" />
+
+            <button type="submit" class="btn-primary-custom">
+                <i class="fa-solid fa-upload me-1"></i>
+                Publish Course
+            </button>
+        </form>
+
+    </div>
+
+</div>

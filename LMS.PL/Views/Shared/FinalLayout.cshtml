@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+        --primary-blue: #2563EB;
+        --main-bg: #F8FAFC;
+        --text-dark: #1E293B;
+        --text-muted: #64748B;
+        --nav-bg: #FFFFFF;
+        }
+
+        body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--main-bg);
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        }
+
+        /* --- Navbar Style --- */
+        .custom-navbar {
+        background: var(--nav-bg);
+        padding: 0.75rem 2rem;
+        border-bottom: 1px solid #E2E8F0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+        }
+
+        .brand-logo {
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: var(--primary-blue);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        }
+
+        .nav-links-wrapper {
+        display: flex;
+        gap: 1.5rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+
+        .nav-link-item {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: 0.3s;
+        padding: 0.5rem 0.8rem;
+        border-radius: 8px;
+        }
+
+        .nav-link-item:hover, .nav-link-item.active {
+        color: var(--primary-blue);
+        background: #EFF6FF;
+        }
+
+        /* --- Middle: Search Bar --- */
+        .search-container {
+        background: #F1F5F9;
+        border-radius: 12px;
+        padding: 0.5rem 1.2rem;
+        width: 300px;
+        display: flex;
+        align-items: center;
+        transition: 0.3s;
+        border: 1px solid transparent;
+        }
+
+        .search-container:focus-within {
+        background: #fff;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-container input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 0.9rem;
+        margin-left: 10px;
+        }
+
+        /* --- Right: Profile & Actions --- */
+        .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        }
+
+        .btn-create-header {
+        /*             background: #3774c1;
+        */              background: var(--primary-blue);
+        color: white !important;
+        padding: 0.6rem 1.2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: 0.3s;
+        }
+
+        .btn-create-header:hover, .user-avatar:hover {
+        background: #1D4ED8;
+        transform: translateY(-1px);
+        }
+
+        .icon-action {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        cursor: pointer;
+        position: relative;
+        }
+
+        .profile-trigger {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-left: 15px;
+        border-left: 1px solid #E2E8F0;
+        cursor: pointer;
+        text-decoration: none;
+        }
+
+        .user-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: 0.3s;
+        }
+
+        /* --- Content Container --- */
+        .main-container {
+        flex-grow: 1;
+        padding: 2.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        }
+
+        footer {
+        background: white;
+        padding: 1.5rem 0;
+        border-top: 1px solid #E2E8F0;
+        text-align: center;
+        color: var(--text-muted);
+        }
+
+        .password-wrapper {
+        position: relative;
+        display flex;
+        align-items: center;
+        }
+
+        .password-toggle-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #94a3b8;
+        z-index: 100; 
+        background: transparent;
+        padding: 5px;
+        }
+
+        .password-wrapper input {
+        padding-right: 45px !important; 
+        }
+
+        input::-ms-reveal,
+        input::-ms-clear {
+        display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="custom-navbar">
+        <div class="nav-left">
+            <a class="brand-logo" asp-controller="Course" asp-action="showAllCourses">
+                @*                 <div style="background: var(--primary-blue); color: white; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">L</div>
+ *@                Learnova
+            </a>
+
+            <ul class="nav-links-wrapper">
+                <li><a class="nav-link-item" asp-controller="Course" asp-action="showAllCourses">Home</a></li>
+                @*                 <li><a class="nav-link-item" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+ *@                <li><a class="nav-link-item" asp-controller="Course" asp-action="MyCourses">My Courses</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            @if (User.Identity.IsAuthenticated)
+            {
+                @if (User.IsInRole("Instructor"))
+                {
+                    <a class="btn-create-header me-3" asp-controller="Course" asp-action="createCourse">
+                        <i class="fa-solid fa-plus me-1"></i> Create Course
+                </a>
+                }
+                <div class="dropdown">
+                    <div class="profile-trigger dropdown-toggle" id="profileMenu" data-bs-toggle="dropdown" style="border:none; cursor:pointer;">
+                        <div class="text-end d-none d-md-block me-2">
+                            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-dark);">@User.Identity.Name</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Welcome back</div>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=@User.Identity.Name&background=2563EB&color=fff" class="user-avatar" />
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px; margin-top: 10px;">
+                        <li><a class="dropdown-item p-2" asp-controller="User" asp-action="Profile"><i class="fa-regular fa-user me-2"></i> My Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="dropdown-item text-danger p-2 border-0 bg-transparent w-100 text-start">
+                                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <a class="nav-link-item me-2" asp-controller="Account" asp-action="Login">Sign In</a>
+                <a class="btn-create-header" asp-controller="Account" asp-action="RegisterInstructor">
+                    <i class="fa-solid fa-chalkboard-user me-1"></i> Become an Instructor
+                </a>
+            }
+        </div>
+    </header>
+
+    <main role="main" class="main-container">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="container">
+            &copy; 2026 - <strong>LMS.PL</strong> - Academic Excellence Platform
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        function togglePassword(inputId, iconElement) {
+            const passwordInput = document.getElementById(inputId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                iconElement.classList.remove('fa-eye-slash');
+                iconElement.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                iconElement.classList.remove('fa-eye');
+                iconElement.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

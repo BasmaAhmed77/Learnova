@@ -1,0 +1,74 @@
+﻿@model LMS.BLL.ModelVM.User.LoginVM
+@{
+    Layout = "FinalLayout";
+    ViewData["Title"] = "Sign In";
+}
+
+@{
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card border-0 shadow-sm" style="border-radius: 20px; background: #ffffff;">
+            <div class="card-body p-5">
+
+                <div class="text-center mb-4">
+                    <div class="mb-3" style="display: inline-block; padding: 12px; background: #EFF6FF; border-radius: 50%;">
+                        <i class="fa-solid fa-shield-halved fa-2x" style="color: var(--primary-blue);"></i>
+                    </div>
+                    <h3 class="fw-bold" style="color: var(--text-dark);">Welcome Back</h3>
+                    <p class="text-muted small">Enter your credentials to access your portal</p>
+                </div>
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="All" class="text-danger small mb-3 fw-bold"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label small fw-bold text-muted">Email Address</label>
+                        <input asp-for="Email" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="e.g. alex@provider.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between">
+                            <label asp-for="Password" class="form-label small fw-bold text-muted">Password</label>
+                            <a asp-action="ForgetPassword" class="small text-decoration-none" style="color: var(--primary-blue); font-size: 0.75rem;">Forget Password?</a>
+                        </div>
+                        <div class="password-wrapper">
+                            <input asp-for="Password" type="password" id="loginPass" class="form-control border-0 bg-light p-2" style="border-radius: 10px;" placeholder="••••••••" />
+                            <i class="fa-solid fa-eye-slash password-toggle-icon" onclick="togglePassword('loginPass', this)"></i>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input asp-for="RememberMe" class="form-check-input" style="cursor: pointer;" />
+                        <label asp-for="RememberMe" class="form-check-label small text-muted" style="cursor: pointer;">Keep me signed in</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-create-header w-100 py-2 mb-3 shadow-sm fw-bold">
+                        Sign In
+                    </button>
+                </form>
+
+                <div class="text-center mt-3 pt-3 border-top">
+                    <p class="small text-muted">
+                        New to our platform?
+                        <a asp-action="Register" class="fw-bold text-decoration-none" style="color: var(--primary-blue);">Create Account</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm mb-4 small fw-bold" style="border-radius: 10px;">
+        <i class="fa-solid fa-circle-check me-2"></i> @TempData["SuccessMessage"]
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,106 @@
+﻿@using LMS.BLL.ModelVM;
+@model LessonVM
+
+@{
+    ViewData["Title"] = "Edit Lesson";
+}
+
+<style>
+
+    .form-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.4rem;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #E2E8F0;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+        transition: 0.2s;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+    .form-actions {
+        margin-top: 1.5rem;
+    }
+
+    .btn-primary-custom {
+        width: 100%;
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-primary-custom:hover {
+            background: #1D4ED8;
+            transform: translateY(-1px);
+        }
+
+</style>
+
+<div class="form-card">
+
+    <div class="form-title">✏️ Edit Lesson</div>
+
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <form method="post" asp-action="saveEditedLesson" asp-controller="Lesson">
+
+        <input type="hidden" asp-for="LessonId" />
+        <input type="hidden" asp-for="CourseId" />
+
+        <div class="form-group">
+            <label class="form-label">Lesson Title</label>
+            <input type="text" asp-for="Title" class="form-input" placeholder="Enter Lesson Title..." />
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Lesson URL</label>
+            <input type="url" asp-for="url" class="form-input" placeholder="Enter Lesson URL..." />
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary-custom">
+                <i class="fa-solid fa-floppy-disk me-1"></i>
+                Save Changes
+            </button>
+        </div>
+
+    </form>
+
+</div>
